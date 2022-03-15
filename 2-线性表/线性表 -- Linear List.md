@@ -1,5 +1,9 @@
 # 线性表 --Linear List
 
+[TOC]
+
+
+
 ## 定义 (逻辑结构)
 
 既有相同的数据类型的n个数据元素的**有限 序 列**, 其中n为**表长**, n = 0是,该线性表是一个**空表**
@@ -31,7 +35,7 @@
 
  ## 存储/物理结构
 
-### 顺序表 : 用顺序存储的方式实现的线性表
+## 顺序表 : 用顺序存储的方式实现的线性表
 
 *顺序存储: 把逻辑上相邻的元素存储在物理位置也相邻的存储单元中* 
 
@@ -138,7 +142,230 @@ int main() {
 }
 ```
 
+#### 顺序表插入删除
 
+```c++
+bool ListInsert(SqList& L, int i, int e) {
+	if (i < 1 || i > L.length + 1 || L.length >= L.MaxSize) {
+		return false;
+	}
+	for (int j = L.length; j >= i; --i) {
+		L.data[j] = L.data[j - 1];
+	}
+	L.data[i - 1] = e;
+	++L.length;
+	return true;
+}
+```
 
+##### 复杂度分析:
 
+* 最好情况:新元素加到表尾, 不需要移动元素, 循环0次
+
+  最好时间复杂度O(1)
+
+* 最坏情况:新元素加到表头,需要将原来所有元素都往后移动, 循环n次 
+
+  最坏时间复杂度O(n)
+
+* 平均复杂度: 假设新元素插入到任何位置概率相同, 平均循环次数: n/2
+
+  平均时间复杂度O(n)
+
+#### 顺序表删除操作
+
+```c++
+bool ListDelete(SqList &L, int i, int &e) {		//i为删除位置, e接收删除元素的内容
+	if (i < 1 || i > L.length) 
+		return false;
+	e = L.data[i-1];														//注意!顺序表位序从1开始,数组下标从0开始
+	for (int j = i; i < L.length; ++j) {
+		L.data[j-1] = L.data[j];
+	}
+	--L.length;
+  return true;
+}
+```
+
+##### 复杂度分析:
+
+* 最好情况:删除表尾元素, 不需要移动元素, 循环0次
+
+  最好时间复杂度O(1)
+
+* 最坏情况:删除表头,需要将原来所有元素都往前移动, 循环n-1次 
+
+  最坏时间复杂度O(n)
+
+* 平均复杂度: 假设新元素插入到任何位置概率相同, 平均循环次数: (n-1)/2
+
+  平均时间复杂度O(n)
+
+#### 顺序表元素查找
+
+* 按位查找
+
+  ```c++
+  int GetElem(SqList &L, int i) {
+  	if (i > L.length || i < 1) {
+  		return -1;
+  	}
+  	return L.data[i-1];
+  }
+  ```
+
+  复杂度分析:
+
+  时间复杂度为O(1)
+
+* 按值查找
+
+  ```c++
+  int LocateElem(SqList &L, int e) {
+  	for (int i = 0; i < L.length; ++i) {
+  		if (L.data[i] == e) 
+  			return i+1;
+  	}
+  	return 0;
+  }
+  ```
+
+  复杂度分析:
+
+  * 最好情况:目标元素在表头
+
+    最好时间复杂度O(1)
+
+  * 最坏情况:目标元素在表尾或不存在 
+
+    最坏时间复杂度O(n)
+
+  * 平均复杂度: 设目标元素在任何位置概率相同
+
+    平均时间复杂度O(n)
+
+## 单链表
+
+表中每个节点除存放数据以外还要存储指向下一节点的指针
+
+### 单链表特点:
+
+1. 不支持随机存取,需要耗费一定空间存放指针
+2. 不要求大片的连续空间,改变容量很方便
+
+### 定义单链表
+
+```c++
+typedef struct LNode{
+  ElemType data;
+  struct LNode *next;
+}LNode, *LinkList;
+//LNode强调节点,LinkList强调链表
+//使用LinkList声明头指针,代码可读性强
+
+//不带头节点链表初始化
+bool InitList(LinkList &L) {	//判断不带头节点的链表为空,只需要判断头节点next指向是否为空
+    L = NULL;
+    return true;
+}
+//带头节点链表初始化
+bool InitList(LinkList &L) {	//判断带头节点链表为空,则只需要判断头节点是否为空
+    L = (LNode *) malloc(sizeof(LNode));
+    if (L == NULL) 
+        return false;
+    L->next = NULL;
+    return true;
+}
+
+```
+
+### 单链表插入(带头节点), 不带头节点需要特殊处理第一个元素
+
+```c++
+
+bool ListInsert(LinkList &L, int i, int e) { //带头节点
+    if (i < 1) return false;
+    LNode *p;
+    int j = 0;
+    p = L;
+    while (p != NULL && j < i-1) {
+        p = p->next;
+        ++j;
+    }
+  	//-------------------------以下可以用return InsertNextNode(p, e); 后插操作代替
+    if (p == NULL) return false;
+    LNode *s = (LNode *) malloc(sizeof(LNode));
+    s->data = e;
+    s->next = p->next;
+    p->next = s;
+    return true;
+  	//-------------------------
+}
+```
+
+#### 指定节点后插操作
+
+```c++
+bool InsertNextNode(LNode *p, int e) {
+    if (p == NULL) return false;
+    LNode *s = (LNode *) malloc(sizeof(LNode));
+    if (s == NULL) return false;
+    s->data = e;
+    s->next = p->next;
+    p->next = s;
+    return true;
+}
+```
+
+#### 指定节点前插操作
+
+```c++
+//将新节点放到p节点之后,将p中元素复制到新节点,在给p节点重新赋值e
+bool InsertPriorNode(LNode *p, int e) {
+    if (p == NULL) return false;
+    LNode *s = (LNode *) malloc(sizeof(LNode));
+    if (s == NULL) return false;
+    s->next = p->next;
+    p->next = s;
+    s->data = p->data;
+    p->data = e;
+    return true;
+}
+```
+
+#### 按位序删除(带头节点) 
+
+```c++
+bool ListDelete(LinkList &L, int i, int &e) { //e接收删除元素的值
+    if(i < 1) return false;
+    LNode *p;
+    int j = 0;
+    p = L;
+    while (p != NULL && j < i-1) {
+        p = p->next;
+        ++j;
+    }
+    if (p == NULL) return false;
+    if (p->next == NULL) return false;
+    LNode *q = p->next;
+    e = q->data;
+    p->next = q->next;
+    free(q);
+    return true;
+}
+```
+
+#### 删除指定节点p
+
+```c++
+//找到指定节点的后继节点,将其元素赋给指定节点,之后删除指定节点的后继节点并释放空间.
+bool DeleteNode(LNode *p) {
+    if (p == NULL) return false;
+    LNode *q = p->next;					
+    p->data = p->next->data;		
+    p->next = q->next;
+    free(q);
+    return true;
+}
+```
 
