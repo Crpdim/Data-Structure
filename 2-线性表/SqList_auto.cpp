@@ -1,3 +1,14 @@
+/**
+ * @file SqList_auto.cpp
+ * @author Crpdim (crpdim7@gmail.com)
+ * @brief 顺序表--动态分配 实现
+ * @version 0.1
+ * @date 2022-03-15
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include<stdio.h>
 #define InitSize 10
 typedef struct {
