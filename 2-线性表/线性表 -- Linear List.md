@@ -369,3 +369,51 @@ bool DeleteNode(LNode *p) {
 }
 ```
 
+#### 单链表建立-尾插法
+
+​	建立一个尾指针,将新数据节点接到尾指针之后并更新尾指针
+
+```c++
+//尾插法建立单链表
+LinkList List_TailInsert(LinkList &L) {         //正向建立单链表
+    int x;
+    L = (LinkList)malloc(sizeof(LNode));        //头节点
+    LNode* s, * r = L;                          //r为表尾指针
+    L->next = NULL;                             //初始化头节点(建立指针时应该养成初始化指针的习惯,防止无法预料的情况发生)
+    scanf("%d", &x);                            //输入节点值
+    while (x != 9999) {                         //不断向尾节点插入新数据,并更新尾节点,输入x = 9999时,插入操作结
+        s = (LNode*)malloc(sizeof(LNode));
+        s->data = x;
+        r->next = s;
+        r = s;
+        scanf("%d", &x);
+    }
+    r->next = NULL;                             //尾节点置空
+    return L;
+}
+```
+
+#### 单链表建立-头插法
+
+在头节点和头节点next之间不断插入节点,得到逆序链表(头插法应用:链表逆置),得到的链表位序与尾插法相反
+
+```c++
+//头插法建立单链表
+LinkList List_HeadInsert(LinkList& L) {     //逆序插入链表,得到的链表与尾插法相反
+    LNode* s;
+    int x;
+    L = (LNode*)malloc(sizeof(LNode));
+    L->next = NULL;                         //!!初始化
+    scanf("%d", &x);
+    while (x != 9999) {
+        s = (LNode*)malloc(sizeof(LNode));
+        s->data = x;								
+        s->next = L->next;
+        L->next = s;
+        scanf("%d", &x);
+    }
+    return L;
+
+}
+```
+
