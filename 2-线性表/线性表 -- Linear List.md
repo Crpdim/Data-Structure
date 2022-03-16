@@ -418,3 +418,73 @@ LinkList List_HeadInsert(LinkList& L) {     //逆序插入链表,得到的链表
 }
 ```
 
+## 双链表实现 
+
+每个节点都有一个前向指针和一个后向指针
+
+```c++
+typedef struct DNode
+{
+    int data;
+    struct DNode *prior, *next;   
+}DNode, *DLinkList;
+
+//双链表初始化
+bool InitDLinkList(DLinkList &L) {
+    L = (DNode *) malloc(sizeof(DNode));
+    if (L == NULL) return false;
+    L->prior = NULL;
+    L->next = NULL;
+    return true;
+}
+
+//双链表插入
+bool InsertNextDNode(DNode *p, DNode *s) {  //在p节点之后插入s
+    if (p == NULL || s == NULL) return false;
+    s->next = p->next;
+    if (p->next != NULL)										//边界情况特殊处理
+        p->next->prior = s;
+    s->prior = p;
+    p->next = s;
+}
+
+//删除p节点的后继节点
+bool DeleteNextDNode(DNode *p) {
+    if (p == NULL) return false;
+    DNode *q = p->next;
+    if (q == NULL) return false;
+    p->next = q->next->next;
+    if (q->next != NULL) 
+        q->next->prior = p;
+    free(q);
+    return true;
+}
+
+//销毁双链表
+void DestoryList(DLinkList &L) {
+    while (L->next != NULL) {
+        DeleteNextDNode(L);
+    }
+    free(L);
+    L = NULL;
+}
+```
+
+## 静态链表
+
+```c++
+#define MaxSize 10
+//定义一个节点
+struct Node{
+    int data;
+    int next;
+};
+//定义一个静态链表
+typedef struct
+{
+    int data;
+    int next;
+}SLinkList [MaxSize];
+
+```
+
