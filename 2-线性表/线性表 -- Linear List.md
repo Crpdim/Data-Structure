@@ -270,7 +270,7 @@ bool InitList(LinkList &L) {	//判断不带头节点的链表为空,只需要判
 }
 //带头节点链表初始化
 bool InitList(LinkList &L) {	//判断带头节点链表为空,则只需要判断头节点是否为空
-    L = (LNode *) malloc(sizeof(LNode));
+    L = (LNode *)malloc(sizeof(LNode));
     if (L == NULL) 
         return false;
     L->next = NULL;
@@ -279,7 +279,9 @@ bool InitList(LinkList &L) {	//判断带头节点链表为空,则只需要判断
 
 ```
 
-### 单链表插入(带头节点), 不带头节点需要特殊处理第一个元素
+### 基本操作实现
+
+#### 单链表插入(带头节点), 不带头节点需要特殊处理第一个元素
 
 ```c++
 
@@ -294,7 +296,7 @@ bool ListInsert(LinkList &L, int i, int e) { //带头节点
     }
   	//-------------------------以下可以用return InsertNextNode(p, e); 后插操作代替
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     s->data = e;
     s->next = p->next;
     p->next = s;
@@ -308,7 +310,7 @@ bool ListInsert(LinkList &L, int i, int e) { //带头节点
 ```c++
 bool InsertNextNode(LNode *p, int e) {
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     if (s == NULL) return false;
     s->data = e;
     s->next = p->next;
@@ -323,7 +325,7 @@ bool InsertNextNode(LNode *p, int e) {
 //将新节点放到p节点之后,将p中元素复制到新节点,在给p节点重新赋值e
 bool InsertPriorNode(LNode *p, int e) {
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     if (s == NULL) return false;
     s->next = p->next;
     p->next = s;
@@ -413,7 +415,6 @@ LinkList List_HeadInsert(LinkList& L) {     //逆序插入链表,得到的链表
         scanf("%d", &x);
     }
     return L;
-
 }
 ```
 
