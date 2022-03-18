@@ -26,5 +26,6 @@ int main() {
 	SqList L;
 	InitList(L);
 	//……
+	
 	return 0;
 }
