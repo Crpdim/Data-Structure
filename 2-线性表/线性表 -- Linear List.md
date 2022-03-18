@@ -270,7 +270,7 @@ bool InitList(LinkList &L) {	//判断不带头节点的链表为空,只需要判
 }
 //带头节点链表初始化
 bool InitList(LinkList &L) {	//判断带头节点链表为空,则只需要判断头节点是否为空
-    L = (LNode *) malloc(sizeof(LNode));
+    L = (LNode *)malloc(sizeof(LNode));
     if (L == NULL) 
         return false;
     L->next = NULL;
@@ -279,7 +279,9 @@ bool InitList(LinkList &L) {	//判断带头节点链表为空,则只需要判断
 
 ```
 
-### 单链表插入(带头节点), 不带头节点需要特殊处理第一个元素
+### 基本操作实现
+
+#### 单链表插入(带头节点), 不带头节点需要特殊处理第一个元素
 
 ```c++
 
@@ -294,7 +296,7 @@ bool ListInsert(LinkList &L, int i, int e) { //带头节点
     }
   	//-------------------------以下可以用return InsertNextNode(p, e); 后插操作代替
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     s->data = e;
     s->next = p->next;
     p->next = s;
@@ -308,7 +310,7 @@ bool ListInsert(LinkList &L, int i, int e) { //带头节点
 ```c++
 bool InsertNextNode(LNode *p, int e) {
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     if (s == NULL) return false;
     s->data = e;
     s->next = p->next;
@@ -323,7 +325,7 @@ bool InsertNextNode(LNode *p, int e) {
 //将新节点放到p节点之后,将p中元素复制到新节点,在给p节点重新赋值e
 bool InsertPriorNode(LNode *p, int e) {
     if (p == NULL) return false;
-    LNode *s = (LNode *) malloc(sizeof(LNode));
+    LNode *s = (LNode *)malloc(sizeof(LNode));
     if (s == NULL) return false;
     s->next = p->next;
     p->next = s;
@@ -367,5 +369,122 @@ bool DeleteNode(LNode *p) {
     free(q);
     return true;
 }
+```
+
+#### 单链表建立-尾插法
+
+​	建立一个尾指针,将新数据节点接到尾指针之后并更新尾指针
+
+```c++
+//尾插法建立单链表
+LinkList List_TailInsert(LinkList &L) {         //正向建立单链表
+    int x;
+    L = (LinkList)malloc(sizeof(LNode));        //头节点
+    LNode* s, * r = L;                          //r为表尾指针
+    L->next = NULL;                             //初始化头节点(建立指针时应该养成初始化指针的习惯,防止无法预料的情况发生)
+    scanf("%d", &x);                            //输入节点值
+    while (x != 9999) {                         //不断向尾节点插入新数据,并更新尾节点,输入x = 9999时,插入操作结
+        s = (LNode*)malloc(sizeof(LNode));
+        s->data = x;
+        r->next = s;
+        r = s;
+        scanf("%d", &x);
+    }
+    r->next = NULL;                             //尾节点置空
+    return L;
+}
+```
+
+#### 单链表建立-头插法
+
+在头节点和头节点next之间不断插入节点,得到逆序链表(头插法应用:链表逆置),得到的链表位序与尾插法相反
+
+```c++
+//头插法建立单链表
+LinkList List_HeadInsert(LinkList& L) {     //逆序插入链表,得到的链表与尾插法相反
+    LNode* s;
+    int x;
+    L = (LNode*)malloc(sizeof(LNode));
+    L->next = NULL;                         //!!初始化
+    scanf("%d", &x);
+    while (x != 9999) {
+        s = (LNode*)malloc(sizeof(LNode));
+        s->data = x;								
+        s->next = L->next;
+        L->next = s;
+        scanf("%d", &x);
+    }
+    return L;
+}
+```
+
+## 双链表实现 
+
+每个节点都有一个前向指针和一个后向指针
+
+```c++
+typedef struct DNode
+{
+    int data;
+    struct DNode *prior, *next;   
+}DNode, *DLinkList;
+
+//双链表初始化
+bool InitDLinkList(DLinkList &L) {
+    L = (DNode *) malloc(sizeof(DNode));
+    if (L == NULL) return false;
+    L->prior = NULL;
+    L->next = NULL;
+    return true;
+}
+
+//双链表插入
+bool InsertNextDNode(DNode *p, DNode *s) {  //在p节点之后插入s
+    if (p == NULL || s == NULL) return false;
+    s->next = p->next;
+    if (p->next != NULL)										//边界情况特殊处理
+        p->next->prior = s;
+    s->prior = p;
+    p->next = s;
+}
+
+//删除p节点的后继节点
+bool DeleteNextDNode(DNode *p) {
+    if (p == NULL) return false;
+    DNode *q = p->next;
+    if (q == NULL) return false;
+    p->next = q->next->next;
+    if (q->next != NULL) 
+        q->next->prior = p;
+    free(q);
+    return true;
+}
+
+//销毁双链表
+void DestoryList(DLinkList &L) {
+    while (L->next != NULL) {
+        DeleteNextDNode(L);
+    }
+    free(L);
+    L = NULL;
+}
+```
+
+## 静态链表
+
+```c++
+#define MaxSize 10
+//定义一个节点
+struct Node{
+    int data;
+    int next;
+};
+//定义一个静态链表
+typedef struct
+{
+    int data;
+    int next;
+}SLinkList [MaxSize];
+
 ```
 
