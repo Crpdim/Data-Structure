@@ -137,5 +137,6 @@ LinkList List_HeadInsert(LinkList& L) {     //逆序插入链表,得到的链表
 }
 
 int main() {
+    cout << "hello world\n" ;
     return 0;
 }
