@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
+
 typedef struct BitNode {
     int data;
-    struct BitNode* left;
-    struct BitNode* right;
-}BitNode, *BitTree;
+    struct BitNode *left;
+    struct BitNode *right;
+} BitNode, *BitTree;
 
 int search(BitTree root, int d) {
     if (root != NULL) {
@@ -26,7 +27,7 @@ int search(BitTree root, int d) {
 
 void insert(BitTree *root, int d) {
     if (*root == NULL) {                                   //初始化新节点
-        (*root) = (BitNode*)malloc(sizeof(BitNode));
+        (*root) = (BitNode *) malloc(sizeof(BitNode));
         (*root)->data = d;
         (*root)->right = (*root)->left = NULL;
     } else {
@@ -40,18 +41,10 @@ void insert(BitTree *root, int d) {
 
 void delete(BitTree *root, int d) {
     if (*root == NULL) {
-        printf("no such node");
+        printf("no such data\n");
     } else {
         if ((*root)->data == d) {
-            if (!(*root)->left) {       //左子树为空
-                BitNode *p = (*root);
-                (*root) = p->right;
-                free(p);
-            } else if (!(*root)->right){
-                BitNode *p = (*root);
-                (*root) = p->left;
-                free(p);
-            } else {
+            if((*root)->left && (*root)->right) {
                 BitNode *Target = (*root);
                 BitNode *temp = (*root)->right;
                 while (temp->left) {
@@ -60,6 +53,14 @@ void delete(BitTree *root, int d) {
                 temp->left = (*root)->left;
                 *root = (*root)->right;
                 free(Target);
+            } else if (!(*root)->left) {
+                BitNode *p = (*root);
+                (*root) = p->right;
+                free(p);
+            } else {
+                BitNode *p = (*root);
+                (*root) = p->left;
+                free(p);
             }
         } else if ((*root)->data > d) {
             delete(&(*root)->left, d);
@@ -71,7 +72,6 @@ void delete(BitTree *root, int d) {
 
 void PreOrder(BitTree root) {
     if (!root) return;
-    BitNode *temp = root;
     PreOrder(root->left);
     printf("%d ", root->data);
     PreOrder(root->right);
@@ -80,16 +80,12 @@ void PreOrder(BitTree root) {
 int main() {
     printf("Hello, World!\n");
     BitTree root = NULL;
-    int a[10] = {25, 12, 20,35,46,24,31,22,55,87};
+    int arr[10] = {53, 17, 78, 9, 45,  65, 94, 23, 81, 88};
     for (int i = 0; i < 10; ++i) {
-        insert(&root, a[i]);
+        insert(&root, arr[i]);
     }
-    for (int i = 9; i >=0; i--) {
-        int x = rand() % 10;
-        delete(&root, a[x]);
-        printf("delete %d, x = %d \n", a[x], x);
-        PreOrder(root);
-    }
+    delete(&root, 78);
+    printf("delete %d, x = %d \n", 78, 78);
     PreOrder(root);
     return 0;
 }
