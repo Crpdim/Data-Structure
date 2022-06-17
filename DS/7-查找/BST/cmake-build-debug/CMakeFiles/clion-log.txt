@@ -1,10 +1,10 @@
-"C:\Program Files\JetBrains\CLion 2022.1.2\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.1.2/bin/ninja/win/ninja.exe" -G Ninja -S C:\Users\Administrator\CLionProjects\BST -B C:\Users\Administrator\CLionProjects\BST\cmake-build-debug
--- The C compiler identification is GNU 11.2.0
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/crpdim/Desktop/GitHub/Data-Structure/DS/7-查找/BST
+-- The C compiler identification is AppleClang 13.0.0.13000029
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: C:/Program Files/JetBrains/CLion 2022.1.2/bin/mingw/bin/gcc.exe - skipped
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/Administrator/CLionProjects/BST/cmake-build-debug
+-- Build files have been written to: /Users/crpdim/Desktop/GitHub/Data-Structure/DS/7-查找/BST/cmake-build-debug

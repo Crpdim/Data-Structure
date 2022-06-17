@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <malloc.h>
+//#include <malloc.h>
 #include <stdlib.h>
 
 typedef struct AVLNode {
@@ -13,16 +13,16 @@ int max(int d1, int d2) {
     return d1 > d2? d1: d2;
 }
 
-int get_hight(AVLNode *t) {             //获取树高
+int get_hight(AVLNode *t) {                         //获取树高
     if (t == NULL) return 0;
     return max(get_hight(t->left), get_hight(t->right)) + 1;
 }
 
-int get_balance_index(AVLNode* t) {     //获取平衡因子
+int get_balance_index(AVLNode* t) {                 //获取平衡因子
     return get_hight(t->left) - get_hight(t->right);
 }
 
-void l_rotate(AVLTree* root) {          //左旋操作
+void l_rotate(AVLTree* root) {                      //左旋操作
     AVLNode *temp = (*root)->right;
     (*root)->right = temp->left;
     temp->left = (*root);
@@ -31,7 +31,7 @@ void l_rotate(AVLTree* root) {          //左旋操作
     (*root)->left->b_index = get_balance_index((*root)->left);
 }
 
-void r_rotate(AVLTree* root) {          //右旋
+void r_rotate(AVLTree* root) {                      //右旋操作
     AVLNode *temp = (*root)->left;
     (*root)->left = temp->right;
     temp->right = (*root);
@@ -40,7 +40,7 @@ void r_rotate(AVLTree* root) {          //右旋
     (*root)->right->b_index = get_balance_index((*root)->right);
 }
 
-void rotate(AVLTree *root) {            //平衡被打破进行旋转操作
+void rotate(AVLTree *root) {                        //平衡被打破进行旋转操作
     if ((*root)->b_index > 1) {
         if ((*root)->left->b_index < 0) {           //LR
             l_rotate(&(*root)->left);

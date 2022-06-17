@@ -1,16 +1,15 @@
 #include <stdio.h>
-#include <malloc.h>
 #include <stdlib.h>
 
-typedef struct BitNode {
+typedef struct BSNode {
     int data;
-    struct BitNode *left;
-    struct BitNode *right;
-} BitNode, *BitTree;
+    struct BSNode *left;
+    struct BSNode *right;
+} BSNode, *BSTree;
 
-int search(BitTree root, int d) {
+int search(BSTree root, int d) {
     if (root != NULL) {
-        BitNode *temp = root;
+        BSNode *temp = root;
         if (d == temp->data) {
             printf("I Find %d \n", temp->data);
             return 1;
@@ -25,9 +24,9 @@ int search(BitTree root, int d) {
     }
 }
 
-void insert(BitTree *root, int d) {
+void insert(BSTree *root, int d) {
     if (*root == NULL) {                                   //初始化新节点
-        (*root) = (BitNode *) malloc(sizeof(BitNode));
+        (*root) = (BSNode *) malloc(sizeof(BSNode));
         (*root)->data = d;
         (*root)->right = (*root)->left = NULL;
     } else {
@@ -39,14 +38,14 @@ void insert(BitTree *root, int d) {
     }
 }
 
-void delete(BitTree *root, int d) {
+void delete(BSTree *root, int d) {
     if (*root == NULL) {
         printf("no such data\n");
     } else {
         if ((*root)->data == d) {
             if((*root)->left && (*root)->right) {
-                BitNode *Target = (*root);
-                BitNode *temp = (*root)->right;
+                BSNode *Target = (*root);
+                BSNode *temp = (*root)->right;
                 while (temp->left) {
                     temp = temp->left;
                 }
@@ -54,11 +53,11 @@ void delete(BitTree *root, int d) {
                 *root = (*root)->right;
                 free(Target);
             } else if (!(*root)->left) {
-                BitNode *p = (*root);
+                BSNode *p = (*root);
                 (*root) = p->right;
                 free(p);
             } else {
-                BitNode *p = (*root);
+                BSNode *p = (*root);
                 (*root) = p->left;
                 free(p);
             }
@@ -70,7 +69,7 @@ void delete(BitTree *root, int d) {
     }
 }
 
-void PreOrder(BitTree root) {
+void PreOrder(BSTree root) {
     if (!root) return;
     PreOrder(root->left);
     printf("%d ", root->data);
@@ -78,14 +77,13 @@ void PreOrder(BitTree root) {
 }
 
 int main() {
-    printf("Hello, World!\n");
-    BitTree root = NULL;
+    BSTree root = NULL;
     int arr[10] = {53, 17, 78, 9, 45,  65, 94, 23, 81, 88};
     for (int i = 0; i < 10; ++i) {
         insert(&root, arr[i]);
     }
     delete(&root, 78);
-    printf("delete %d, x = %d \n", 78, 78);
+    printf("delete %d\n", 78);
     PreOrder(root);
     return 0;
 }
