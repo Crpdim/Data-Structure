@@ -88,13 +88,30 @@ int delete(AVLTree* root, int d) {                              //删除节点
         if (d == (*root)->data) {
             if ((*root)->left && (*root)->right) {               //被删除节点左右儿子都存在时
                 AVLNode *temp = (*root)->right;
-                AVLNode *target = (*root);
-                while (temp->left) {
+                /// **************************************
+                /// 另一种删除方式（把该节点左孩子接到后继节点的右孩子，并将该节点指针指向右孩子）
+//                AVLNode *target = (*root);
+//                while (temp->left) {                              //寻找后继节点
+//                    temp = temp->left;
+//                }
+//                temp->left = (*root)->left;                      //将该节点后继节点左指针指向该节点的左孩子
+//                (*root) = (*root)->right;                        //将指针指向右孩子
+//                free(target);
+                /// **************************************
+                /// 将后继节点数据复制到该节点，并删除后继节点
+                while (temp->left && temp->left->left) {
                     temp = temp->left;
                 }
-                temp->left = (*root)->left;                      //将该节点后继节点左指针指向该节点的左孩子
-                (*root) = (*root)->right;                        //用右孩子替换该节点
-                free(target);
+                AVLNode *p = temp;
+                if (temp->left) {
+                    p = temp->left;
+                    temp->left = p->right;
+                } else {
+                    (*root)->right = temp->right;
+                }
+                (*root)->data = p->data;
+                free(p);
+
             } else if ((*root)->left) {
                 AVLNode *p = (*root);                            //右孩子为空，直接用左孩子替换该节点
                 (*root) = (*root)->left;
@@ -128,12 +145,16 @@ void PreOrder(AVLTree root) {
 int main() {
     AVLTree root = NULL;
     int b[10] = {53, 17, 78, 9, 45,  65, 94, 23, 81, 88};
-    for (int i = 0; i < 10; ++i) {
-        insert(&root, b[i]);
+    for (int i = 0; i < 100; ++i) {
+        int d = rand()%100;
+        insert(&root, d);
     }
-    PreOrder(root);
-    printf("\n");
-    delete(&root, 81);
-    PreOrder(root);
+    for (int i = 0; i < 100; ++i) {
+        int x = rand()%100;
+        delete(&root, x);
+        printf("delete %d\n", x);
+        PreOrder(root);
+        printf("\n");
+    }
     return 0;
 }

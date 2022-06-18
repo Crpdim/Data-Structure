@@ -30,7 +30,10 @@ void insert(BSTree *root, int d) {
         (*root)->data = d;
         (*root)->right = (*root)->left = NULL;
     } else {
-        if (d > (*root)->data) {
+        if (d == (*root)->data) {
+            printf("data [%d] is already exist\n", d);
+            return;
+        } else if (d > (*root)->data) {
             insert(&(*root)->right, d);
         } else {
             insert(&(*root)->left, d);
@@ -44,14 +47,31 @@ void delete(BSTree *root, int d) {
     } else {
         if ((*root)->data == d) {
             if((*root)->left && (*root)->right) {
-                BSNode *Target = (*root);
                 BSNode *temp = (*root)->right;
-                while (temp->left) {
+                /// *********************************
+                /// 另一种删除方式
+//                BSNode *Target = (*root);
+//                while (temp->left) {
+//                    temp = temp->left;
+//                }
+//                temp->left = (*root)->left;
+//                *root = (*root)->right;
+//                free(Target);
+                /// **********************************
+                /// 将后继节点数据复制到该节点，并删除后继节点
+                while (temp->left && temp->left->left) {
                     temp = temp->left;
                 }
-                temp->left = (*root)->left;
-                *root = (*root)->right;
-                free(Target);
+                BSNode *p = temp;
+                if (temp->left) {
+                    p = temp->left;
+                    temp->left = p->right;
+                } else {
+                    (*root)->right = temp->right;
+                }
+                (*root)->data = p->data;
+                free(p);
+
             } else if (!(*root)->left) {
                 BSNode *p = (*root);
                 (*root) = p->right;
@@ -79,11 +99,17 @@ void PreOrder(BSTree root) {
 int main() {
     BSTree root = NULL;
     int arr[10] = {53, 17, 78, 9, 45,  65, 94, 23, 81, 88};
-    for (int i = 0; i < 10; ++i) {
-        insert(&root, arr[i]);
+    for (int i = 0; i < 100; ++i) {
+        int d = rand()%100;
+        insert(&root, d);
     }
-    delete(&root, 78);
-    printf("delete %d\n", 78);
-    PreOrder(root);
+    for (int i = 0; i < 100; ++i) {
+        int x = rand()%100;
+        delete(&root, x);
+        printf("delete %d\n", x);
+        PreOrder(root);
+        printf("\n");
+    }
+
     return 0;
 }
