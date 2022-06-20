@@ -5,7 +5,9 @@
 #ifndef SORT_SORT_H
 #define SORT_SORT_H
 #endif //SORT_SORT_H
-#define SIZE 100000
+#define SIZE 10000
+#include "Heap.h"
+
 
 void InsertSort(int a[], int n) {                    //将待排序的记录按关键字大小插入到前面已经排好序的序列中
     int i, j, temp;
@@ -129,3 +131,4 @@ void SelectSort(int a[], int n) {
  * 算法稳定性：不稳定
  * 顺序表和链表都适用
  */
+
