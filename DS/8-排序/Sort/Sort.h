@@ -132,3 +132,48 @@ void SelectSort(int a[], int n) {
  * 顺序表和链表都适用
  */
 
+
+int b[SIZE];
+void Merge(int a[], int low, int mid, int high) {
+    int i, j, k;
+    for (k = low; k <= high; ++k)                                   //复制到b数组
+        b[k] = a[k];
+    for (i = low, j = mid+1, k = low; i <= mid && j <= high; k++) { //将b数组中的两部分进行归并填入a数组
+        if (b[i] <= b[j])
+            a[k] = b[i++];
+        else
+            a[k] = b[j++];
+    }
+    while (i <= mid)   a[k++] = b[i++];                             //当某一部分走完后，判断另一部分是否走完，若没有，直接依次填入
+    while (j <= high)   a[k++] = b[j++];
+}
+
+void MergeSort(int a[], int low, int high) {
+    if (low >= high) return;
+    int mid = (low+high)/2;
+    MergeSort(a, low, mid);                 //左半部分归并
+    MergeSort(a, mid+1, high);               //右半部分归并
+    Merge(a, low, mid, high);                     //已经排好序的左右进行归并
+} /**
+ * 归并排序
+ * 时间复杂度O(nlog2n) （每趟时间复杂度O(n),一共log2n趟
+ * 空间复杂度O(n) (辅助数组O(n)+递归O(log2n))
+ * */
+
+
+/***
+* 基数排序
+ * 数的关键字可以很方便的拆分成d组
+ * 每组关键字取值范围r不大
+ * 数据元素个数n较大
+ * 时间复杂度 O(d(n+r))
+ * 空间复杂度 O(r)
+*/
+
+
+/***
+* 外部排序
+ * 先读入各块，对块进行内部排序，生成一个归并段，后块与块进行归并排序
+ * 每一趟归并都要读写所有数据
+ * 时间开销： 读写外存 + 内部排序时间 + 内部归并排序时间
+*/
