@@ -12,10 +12,7 @@
 
 
 // #include <bits/stdc++.h>
-#include<iostream>
 #include<stdio.h>
-using namespace std;
-
 typedef struct LinkNode{ 
     int data;
     struct LinkNode *next;
